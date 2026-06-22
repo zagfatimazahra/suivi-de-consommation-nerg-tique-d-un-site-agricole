@@ -173,17 +173,39 @@ AzuraEnergie_IoT_Supervision/
 │   ├── bridge.py                # Pont MQTT → InfluxDB Cloud
 │   └── main.py                  # Application principale + Random Forest
 │
-├── frontend/                   # Tableau de bord React
-│   ├── src/
-│   │   ├── App.jsx
-│   │   ├── pages/               # 7 pages fonctionnelles
-│   │   └── components/
-│   ├── public/
-│   ├── package.json
-│   └── vite.config.js
+├── docs/                       # Documentation et schémas
+│   ├── architecture.png
+│   └── circuit_maquette.png
 │
-├── nodered/                    # Flows Node-RED
-│   └── flow_supervision_azuraEnergie.json
+├── frontend/                   # Tableau de bord React
+│   ├── public/
+│   │   ├── faicon.svg
+│   │   └── icons.svg
+│   │     
+│   └── src/
+│       ├── assets/
+│       │    ├── hero.png
+│       │    ├── logo.png
+│       │    ├── react.png
+│       │    └── vite.png
+│       │
+│       ├── components/
+│       │    └── Navbar.jsx
+│       │  
+│       ├── pages/             # 7 pages fonctionnelles
+│       │    ├── Alerts.jsx
+│       │    ├── Analyse.jsx
+│       │    ├── Bilan.jsx
+│       │    ├── Export.jsx
+│       │    ├── Home.jsx
+│       │    ├── IA.jsx
+│       │    └── Login.jsx
+│       │  
+│       ├── README.md
+│       ├── index.html
+│       ├── package-lock.json
+│       ├── package.json 
+│       └── vite.config.js               
 │
 ├── maquette/                   # Code et configuration maquette
 │   ├── code_maquette.ino
@@ -191,18 +213,10 @@ AzuraEnergie_IoT_Supervision/
 │   ├── grafana_dashboard.json
 │   └── telegraf.conf
 │
-└── docs/                       # Documentation et schémas
-    ├── architecture.png
-    └── circuit_maquette.png
+├── nodered/                    # Flows Node-RED
+│   └── flow_supervision_azuraEnergie.json
+└──
 ```
-
----
-
-## 📜 Licence
-
-Ce projet est distribué sous licence **MIT**. Voir le fichier `LICENSE` pour plus de détails.
-
----
 
 ## 👤 Auteur
 
