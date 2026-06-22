@@ -187,7 +187,7 @@ AzuraEnergie_IoT_Supervision/
 │   ├── flow_supervision_azuraEnergie.json
 │
 ├── maquette/                   # Code et configuration maquette
-│   ├── code_maque.ino
+│   ├── code_maquette.ino
 │   ├── telegraf.conf
 │   ├── docker-compose.yml
 │   └── grafana_dashboard.json
