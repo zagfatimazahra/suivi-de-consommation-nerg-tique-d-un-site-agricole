@@ -1,0 +1,108 @@
+# =============================================================================
+# Docker Compose — Maquette de validation
+# Projet : Suivi de consommation énergétique d'un site agricole
+# Composants : EMQX (broker MQTT) → Telegraf (collecte) → InfluxDB (base)
+#              → Grafana (visualisation)
+# =============================================================================
+
+version: '3.8'
+
+services:
+
+  # ─────────────────────────────────────────────────────────────────
+  # EMQX — Broker MQTT
+  # ─────────────────────────────────────────────────────────────────
+  emqx:
+    image: emqx/emqx:latest
+    container_name: emqx
+    restart: unless-stopped
+    ports:
+      - "1883:1883"     # Port MQTT standard
+      - "8083:8083"     # Port WebSocket
+      - "8084:8084"     # Port WebSocket TLS
+      - "8883:8883"     # Port MQTT TLS
+      - "18083:18083"   # Interface web d'administration
+    environment:
+      - EMQX_NAME=emqx
+      - EMQX_HOST=127.0.0.1
+    volumes:
+      - emqx_data:/opt/emqx/data
+      - emqx_log:/opt/emqx/log
+    networks:
+      - maquette_network
+
+  # ─────────────────────────────────────────────────────────────────
+  # InfluxDB 2.7 — Base de données temporelle
+  # ─────────────────────────────────────────────────────────────────
+  influxdb:
+    image: influxdb:2.7
+    container_name: influxdb
+    restart: unless-stopped
+    ports:
+      - "8086:8086"
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=admin
+      - DOCKER_INFLUXDB_INIT_PASSWORD=admin123456
+      - DOCKER_INFLUXDB_INIT_ORG=pfe_agricole
+      - DOCKER_INFLUXDB_INIT_BUCKET=maquette
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=mon-super-token-secret-a-changer
+    volumes:
+      - influxdb_data:/var/lib/influxdb2
+      - influxdb_config:/etc/influxdb2
+    networks:
+      - maquette_network
+
+  # ─────────────────────────────────────────────────────────────────
+  # Telegraf — Agent de collecte
+  # ─────────────────────────────────────────────────────────────────
+  telegraf:
+    image: telegraf:latest
+    container_name: telegraf
+    restart: unless-stopped
+    depends_on:
+      - emqx
+      - influxdb
+    volumes:
+      - ./telegraf.conf:/etc/telegraf/telegraf.conf:ro
+    networks:
+      - maquette_network
+
+  # ─────────────────────────────────────────────────────────────────
+  # Grafana — Plateforme de visualisation
+  # ─────────────────────────────────────────────────────────────────
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      - influxdb
+    networks:
+      - maquette_network
+
+
+# =============================================================================
+# Volumes persistants
+# =============================================================================
+volumes:
+  emqx_data:
+  emqx_log:
+  influxdb_data:
+  influxdb_config:
+  grafana_data:
+
+
+# =============================================================================
+# Réseau interne pour la communication entre conteneurs
+# =============================================================================
+networks:
+  maquette_network:
+    driver: bridge
