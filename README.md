@@ -105,8 +105,8 @@ Une **maquette de validation indépendante**, articulée autour d'un microcontr�
 **1. Cloner le dépôt :**
 
 ```bash
-git clone https://github.com/zagfatimazahra/suivi-de-consommation-nerg-tique-d-un-site-agricole
-cd suivi-de-consommation-nerg-tique-d-un-site-agricole
+git clone https://github.com/zagfatimazahra/AzuraEnergie_IoT_Supervision
+cd AzuraEnergie_IoT_Supervision
 ```
 
 **2. Configurer les variables d'environnement :**
